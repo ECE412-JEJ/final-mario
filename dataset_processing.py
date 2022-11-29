@@ -1,8 +1,115 @@
+import os
+import shutil
+import sys
 import json
-from nemo.collections.asr.models import EncDecCTCModel
+import nemo
+import torch
+import torchaudio
+import numpy as np
+from pysptk import sptk
+from pathlib import Path
+from tqdm.notebook import tqdm
+import ffmpeg
 
-asr_model = EncDecCTCModel.from_pretrained(model_name="asr_talknet_aligner").cpu().eval()
+def fix_transcripts(inpath):
+    found_arpabet = False
+    found_grapheme = False
+    with open(inpath, "r", encoding="utf8") as f:
+        lines = f.readlines()
+    with open(inpath, "w", encoding="utf8") as f:
+        for l in lines:
+            if l.strip() == "":
+                continue
+            if "{" in l:
+                if not found_arpabet:
+                    print("Warning: Skipping ARPABET lines (not supported).")
+                    found_arpabet = True
+            else:
+                f.write(l)
+                found_grapheme = True
+    assert found_grapheme, "No non-ARPABET lines found in " + inpath
 
-def forward_extractor(tokens, log_probs, blank):
-    n, m = len(tokens), log_probs.shape[0]
+def generate_json(inpath, outpath):
+    output = ""
+    sample_rate = 22050
+    with open(inpath, "r", encoding="utf8") as f:
+        for l in f.readlines():
+            lpath = l.split("|")[0].strip()
+            if lpath[:5] != "wavs/":
+                lpath = "wavs/" + lpath
+            size = os.stat(
+                os.path.join(os.path.dirname(inpath), lpath)
+            ).st_size
+            x = {
+                "audio_filepath": lpath,
+                "duration": size / (sample_rate * 2),
+                "text": l.split("|")[1].strip(),
+            }
+            output += json.dumps(x) + "\n"
+        with open(outpath, "w", encoding="utf8") as w:
+            w.write(output)
 
+def convert_to_22k(inpath):
+    if inpath.strip()[-4:].lower() != ".wav":
+        print("Warning: " + inpath.strip() + " is not a .wav file!")
+        return
+    ffmpeg.input(inpath).output(
+        inpath + "_22k.wav",
+        ar="22050",
+        ac="1",
+        acodec="pcm_s16le",
+        map_metadata="-1",
+        fflags="+bitexact",
+    ).overwrite_output().run(quiet=True)
+    os.remove(inpath)
+    os.rename(inpath + "_22k.wav", inpath)
+
+# Extract dataset
+os.chdir('/content')
+if os.path.exists("/content/wavs"):
+    shutil.rmtree("/content/wavs")
+os.mkdir("wavs")
+os.chdir("wavs")
+if dataset[-4:] == ".zip":
+    !unzip -q "{dataset}"
+elif dataset[-4:] == ".tar":
+    !tar -xf "{dataset}"
+else:
+    raise Exception("Unknown extension for dataset")
+if os.path.exists("/content/wavs/wavs"):
+    shutil.move("/content/wavs/wavs", "/content/tempwavs")
+    shutil.rmtree("/content/wavs")
+    shutil.move("/content/tempwavs", "/content/wavs")
+
+# Filelist for preprocessing
+os.chdir('/content')
+shutil.copy(train_filelist, "trainfiles.txt")
+shutil.copy(val_filelist, "valfiles.txt")
+fix_transcripts("trainfiles.txt")
+fix_transcripts("valfiles.txt")
+seen_files = []
+with open("trainfiles.txt") as f:
+    t = f.read().split("\n")
+with open("valfiles.txt") as f:
+    v = f.read().split("\n")
+    all_filelist = t[:] + v[:]
+with open("/content/allfiles.txt", "w") as f:
+    for x in all_filelist:
+        if x.strip() == "":
+            continue
+        if x.split("|")[0] not in seen_files:
+            seen_files.append(x.split("|")[0])
+            f.write(x.strip() + "\n")
+
+# Ensure audio is 22k
+print("Converting audio...")
+for r, _, f in os.walk("/content/wavs"):
+    for name in tqdm(f):
+        convert_to_22k(os.path.join(r, name))
+
+# Convert to JSON
+generate_json("trainfiles.txt", "trainfiles.json")
+generate_json("valfiles.txt", "valfiles.json")
+generate_json("allfiles.txt", "allfiles.json")
+
+print("OK")
