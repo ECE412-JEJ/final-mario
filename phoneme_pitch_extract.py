@@ -5,6 +5,7 @@ import torch
 import torchaudio
 from pathlib import Path
 from tqdm import tqdm
+import nemo
 from nemo.collections.asr.models import EncDecCTCModel
 asr_model = EncDecCTCModel.from_pretrained(model_name="asr_talknet_aligner").cpu().eval()
 
