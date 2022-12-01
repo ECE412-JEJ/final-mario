@@ -21,10 +21,10 @@ output_dir = default_path + "/voice_sample/mario/"
 
 def train(cfg):
     cfg.sample_rate = 22050
-    cfg.train_dataset = "trainfiles.json"
-    cfg.validation_datasets = "valfiles.json"
-    cfg.durs_file = os.path.join(default_path + output_dir, "durations.pt")
-    cfg.f0_file = os.path.join(default_path + output_dir, "f0s.pt")
+    cfg.train_dataset = default_path + "/content/trainfiles.json"
+    cfg.validation_datasets = default_path + "/content/valfiles.json"
+    cfg.durs_file = os.path.join(output_dir, "durations.pt")
+    cfg.f0_file = os.path.join(output_dir, "f0s.pt")
     cfg.trainer.accelerator = "dp"
     cfg.trainer.max_epochs = epochs
     cfg.trainer.check_val_every_n_epoch = 5
@@ -38,7 +38,7 @@ def train(cfg):
     # Find checkpoints
     ckpt_path = ""
     if load_checkpoints:
-      path0 = os.path.join(default_path + output_dir, "TalkNetDurs")
+      path0 = os.path.join(output_dir, "TalkNetDurs")
       if os.path.exists(path0):
           path1 = sorted(os.listdir(path0))
           for i in range(len(path1)):

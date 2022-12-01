@@ -1,4 +1,7 @@
-batch_size = 64 #@param {type:"integer"}
+default_path  = "/afs/ee.cooper.edu/user/j/jiyoon.pyo/final-mario"
+output_dir = default_path + "/voice_sample/mario/"
+
+batch_size = 64
 epochs = 50
 
 import json
@@ -24,8 +27,8 @@ from nemo.utils.exp_manager import exp_manager
 
 def train(cfg):
     cfg.sample_rate = 22050
-    cfg.train_dataset = "trainfiles.json"
-    cfg.validation_datasets = "valfiles.json"
+    cfg.train_dataset = default_path + "/content/trainfiles.json"
+    cfg.validation_datasets = default_path + "/content/valfiles.json"
     cfg.durs_file = os.path.join(output_dir, "durations.pt")
     cfg.f0_file = os.path.join(output_dir, "f0s.pt")
     cfg.trainer.accelerator = "dp"
@@ -58,7 +61,7 @@ def train(cfg):
         trainer = pl.Trainer(**cfg.trainer, resume_from_checkpoint = ckpt_path)
         model = TalkNetPitchModel(cfg=cfg.model, trainer=trainer)
     else:
-        warmstart_path = "/content/talknet_pitch.nemo"
+        warmstart_path = default_path + "/conf/talknet_pitch.nemo"
         trainer = pl.Trainer(**cfg.trainer)
         model = TalkNetPitchModel.restore_from(warmstart_path, override_config_path=cfg)
         model.set_trainer(trainer)
