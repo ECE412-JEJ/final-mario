@@ -15,7 +15,7 @@ import ffmpeg
 default_path  = "/afs/ee.cooper.edu/user/j/jiyoon.pyo/final-mario"
 dataset = default_path + "/content/mario-voice-dataset/mario-dataset.zip"
 train_filelist = default_path + "/content/mario-voice-dataset/train_dataset.txt"
-test_filelist = default_path + "/content/mario-voice-dataset/val_dataset.txt"
+val_filelist = default_path + "/content/mario-voice-dataset/val_dataset.txt"
 output_dir = default_path + "/voice_sample/mario"
 
 def fix_transcripts(inpath):
