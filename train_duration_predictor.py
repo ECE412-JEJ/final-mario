@@ -52,7 +52,7 @@ def train(cfg):
         trainer = pl.Trainer(**cfg.trainer, resume_from_checkpoint = ckpt_path)
         model = TalkNetDursModel(cfg=cfg.model, trainer=trainer)
     else:
-        warmstart_path = "./warmstart/talknet_durs.nemo"
+        warmstart_path = "./conf/talknet_durs.nemo"
         trainer = pl.Trainer(**cfg.trainer)
         model = TalkNetDursModel.restore_from(warmstart_path, override_config_path=cfg)
         model.set_trainer(trainer)
