@@ -9,7 +9,14 @@ import numpy as np
 from pysptk import sptk
 from pathlib import Path
 from tqdm.notebook import tqdm
+from zipfile import ZipFile
 import ffmpeg
+
+default_path  = "/afs/ee.cooper.edu/user/j/jiyoon.pyo/final-mario"
+dataset = default_path + "/content/mario-voice-dataset/mario-dataset.zip"
+train_filelist = default_path + "/content/mario-voice-dataset/train_dataset.txt"
+test_filelist = default_path + "/content/mario-voice-dataset/val_dataset.txt"
+output_dir = default_path + "/voice_sample/mario"
 
 def fix_transcripts(inpath):
     found_arpabet = False
@@ -65,15 +72,16 @@ def convert_to_22k(inpath):
     os.rename(inpath + "_22k.wav", inpath)
 
 # Extract dataset
-os.chdir('/content')
+os.chdir('content')
 if os.path.exists("/content/wavs"):
     shutil.rmtree("/content/wavs")
 os.mkdir("wavs")
 os.chdir("wavs")
 if dataset[-4:] == ".zip":
-    !unzip -q "{dataset}"
+    with ZipFile(dataset, 'r') as zObject:
+        zObject.extractall("./content/wavs")
 elif dataset[-4:] == ".tar":
-    !tar -xf "{dataset}"
+    shutil.unpack_archive(dataset, "/content/wavs")
 else:
     raise Exception("Unknown extension for dataset")
 if os.path.exists("/content/wavs/wavs"):
