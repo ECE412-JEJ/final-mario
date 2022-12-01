@@ -14,14 +14,15 @@ from nemo.collections.common.callbacks import LogEpochTimeCallback
 from nemo.collections.tts.models import TalkNetDursModel
 from nemo.core.config import hydra_runner
 from nemo.utils.exp_manager import exp_manager
+import nemo
 
 default_path  = "/afs/ee.cooper.edu/user/j/jiyoon.pyo/final-mario"
-output_dir = default_path + "/voice_sample/mario"
+output_dir = default_path + "/voice_sample/mario/"
 
 def train(cfg):
     cfg.sample_rate = 22050
-    cfg.train_dataset = "./content/trainfiles.json"
-    cfg.validation_datasets = "./content/valfiles.json"
+    cfg.train_dataset = "trainfiles.json"
+    cfg.validation_datasets = "valfiles.json"
     cfg.durs_file = os.path.join(default_path + output_dir, "durations.pt")
     cfg.f0_file = os.path.join(default_path + output_dir, "f0s.pt")
     cfg.trainer.accelerator = "dp"
@@ -32,11 +33,12 @@ def train(cfg):
     cfg.model.optim.lr = learning_rate
     cfg.model.optim.sched.min_lr = min_learning_rate
     cfg.exp_manager.exp_dir = output_dir
+    #cfg.dataset = default_path + "/content/allfiles.json"
 
     # Find checkpoints
     ckpt_path = ""
     if load_checkpoints:
-      path0 = os.path.join(output_dir, "TalkNetDurs")
+      path0 = os.path.join(default_path + output_dir, "TalkNetDurs")
       if os.path.exists(path0):
           path1 = sorted(os.listdir(path0))
           for i in range(len(path1)):
@@ -52,7 +54,7 @@ def train(cfg):
         trainer = pl.Trainer(**cfg.trainer, resume_from_checkpoint = ckpt_path)
         model = TalkNetDursModel(cfg=cfg.model, trainer=trainer)
     else:
-        warmstart_path = "./conf/talknet_durs.nemo"
+        warmstart_path = default_path + "/conf/talknet_durs.nemo"
         trainer = pl.Trainer(**cfg.trainer)
         model = TalkNetDursModel.restore_from(warmstart_path, override_config_path=cfg)
         model.set_trainer(trainer)
