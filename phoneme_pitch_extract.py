@@ -62,7 +62,7 @@ def preprocess_tokens(tokens, blank):
     return tokens
 
 data_config = {
-    'manifest_filepath': "allfiles.json",
+    'manifest_filepath': default_path + "/content/allfiles.json",
     'sample_rate': 22050,
     'labels': asr_model.decoder.vocabulary,
     'batch_size': 1,
