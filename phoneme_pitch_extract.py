@@ -142,7 +142,7 @@ if os.path.exists(os.path.join(output_dir, "f0s.pt")):
     print("f0s.pt already exists; skipping")
 else:
     f0_data = {}
-    with open("allfiles.json") as f:
+    with open(default_path + "/content/allfiles.json") as f:
         for i, l in enumerate(f.readlines()):
             print(str(i))
             audio_path = json.loads(l)["audio_filepath"]
