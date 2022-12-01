@@ -48,7 +48,7 @@ def generate_json(inpath, outpath):
                 os.path.join(os.path.dirname(inpath), lpath)
             ).st_size
             x = {
-                "audio_filepath": lpath,
+                "audio_filepath": default_path + "/content/" + lpath,
                 "duration": size / (sample_rate * 2),
                 "text": l.split("|")[1].strip(),
             }

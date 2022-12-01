@@ -149,7 +149,7 @@ else:
             f0_data[Path(audio_path).stem] = crepe_f0(audio_path)
 
     # calculate f0 stats (mean & std) only for train set
-    with open("trainfiles.json") as f:
+    with open("./content/trainfiles.json") as f:
         train_ids = {Path(json.loads(l)["audio_filepath"]).stem for l in f}
     all_f0 = torch.cat([f0[f0 >= 1e-5] for f0_id, f0 in f0_data.items() if f0_id in train_ids])
 
