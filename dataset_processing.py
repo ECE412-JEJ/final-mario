@@ -8,7 +8,7 @@ import torchaudio
 import numpy as np
 from pysptk import sptk
 from pathlib import Path
-from tqdm.notebook import tqdm
+from tqdm import tqdm
 from zipfile import ZipFile
 import ffmpeg
 
