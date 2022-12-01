@@ -1,6 +1,15 @@
+import os
 import json
+import numpy as np
+import torch
+import torchaudio
+from pathlib import Path
+from tqdm import tqdm
 from nemo.collections.asr.models import EncDecCTCModel
 asr_model = EncDecCTCModel.from_pretrained(model_name="asr_talknet_aligner").cpu().eval()
+
+default_path  = "/afs/ee.cooper.edu/user/j/jiyoon.pyo/final-mario"
+output_dir = default_path + "/voice_sample/mario"
 
 def forward_extractor(tokens, log_probs, blank):
     """Computes states f and p."""
