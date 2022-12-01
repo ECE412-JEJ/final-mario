@@ -72,25 +72,25 @@ def convert_to_22k(inpath):
     os.rename(inpath + "_22k.wav", inpath)
 
 # Extract dataset
-os.chdir('content')
-if os.path.exists("/content/wavs"):
-    shutil.rmtree("/content/wavs")
+os.chdir(default_path + '/content')
+if os.path.exists(default_path + "/content/wavs"):
+    shutil.rmtree(default_path + "/content/wavs")
 os.mkdir("wavs")
 os.chdir("wavs")
 if dataset[-4:] == ".zip":
     with ZipFile(dataset, 'r') as zObject:
-        zObject.extractall("./content/wavs")
+        zObject.extractall(default_path + "/content/wavs")
 elif dataset[-4:] == ".tar":
-    shutil.unpack_archive(dataset, "/content/wavs")
+    shutil.unpack_archive(dataset, default_path + "/content/wavs")
 else:
     raise Exception("Unknown extension for dataset")
-if os.path.exists("/content/wavs/wavs"):
-    shutil.move("/content/wavs/wavs", "/content/tempwavs")
-    shutil.rmtree("/content/wavs")
-    shutil.move("/content/tempwavs", "/content/wavs")
+if os.path.exists(default_path + "/content/wavs/wavs"):
+    shutil.move(default_path + "/content/wavs/wavs", default_path + "/content/tempwavs")
+    shutil.rmtree(default_path + "/content/wavs")
+    shutil.move(default_path + "/content/tempwavs", default_path + "/content/wavs")
 
 # Filelist for preprocessing
-os.chdir('/content')
+os.chdir(default_path + '/content')
 shutil.copy(train_filelist, "trainfiles.txt")
 shutil.copy(val_filelist, "valfiles.txt")
 fix_transcripts("trainfiles.txt")
@@ -101,7 +101,7 @@ with open("trainfiles.txt") as f:
 with open("valfiles.txt") as f:
     v = f.read().split("\n")
     all_filelist = t[:] + v[:]
-with open("/content/allfiles.txt", "w") as f:
+with open(default_path + "/content/allfiles.txt", "w") as f:
     for x in all_filelist:
         if x.strip() == "":
             continue
@@ -111,7 +111,7 @@ with open("/content/allfiles.txt", "w") as f:
 
 # Ensure audio is 22k
 print("Converting audio...")
-for r, _, f in os.walk("/content/wavs"):
+for r, _, f in os.walk(default_path + "/content/wavs"):
     for name in tqdm(f):
         convert_to_22k(os.path.join(r, name))
 
