@@ -1,0 +1,15 @@
+GPU available: True, used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [1,2]
+
+  | Name  | Type           | Params
+-----------------------------------------
+0 | embed | Embedding      | 7.6 K 
+1 | model | ConvASREncoder | 2.5 M 
+2 | proj  | Conv1d         | 513   
+-----------------------------------------
+2.5 M     Trainable params
+0         Non-trainable params
+2.5 M     Total params
+9.841     Total estimated model params size (MB)

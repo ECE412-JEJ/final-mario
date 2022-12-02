@@ -1,0 +1,154 @@
+d_char: 128
+dropout: 0.1
+separable: true
+train_ds:
+  dataset:
+    _target_: nemo.collections.asr.data.audio_to_text.AudioToCharWithDursF0Dataset
+    manifest_filepath: /afs/ee.cooper.edu/user/j/jiyoon.pyo/final-mario/content/trainfiles.json
+    max_duration: null
+    min_duration: 0.1
+    int_values: false
+    load_audio: false
+    normalize: false
+    sample_rate: 22050
+    trim: false
+    durs_file: /afs/ee.cooper.edu/user/j/jiyoon.pyo/final-mario/voice_sample/mario/durations.pt
+    f0_file: /afs/ee.cooper.edu/user/j/jiyoon.pyo/final-mario/voice_sample/mario/f0s.pt
+    blanking: true
+    vocab:
+      notation: phonemes
+      punct: true
+      spaces: true
+      stresses: false
+      add_blank_at: last
+  dataloader_params:
+    drop_last: false
+    shuffle: true
+    batch_size: 64
+    num_workers: 4
+validation_ds:
+  dataset:
+    _target_: nemo.collections.asr.data.audio_to_text.AudioToCharWithDursF0Dataset
+    manifest_filepath: /afs/ee.cooper.edu/user/j/jiyoon.pyo/final-mario/content/valfiles.json
+    max_duration: null
+    min_duration: 0.1
+    int_values: false
+    load_audio: false
+    normalize: false
+    sample_rate: 22050
+    trim: false
+    durs_file: /afs/ee.cooper.edu/user/j/jiyoon.pyo/final-mario/voice_sample/mario/durations.pt
+    f0_file: /afs/ee.cooper.edu/user/j/jiyoon.pyo/final-mario/voice_sample/mario/f0s.pt
+    blanking: true
+    vocab:
+      notation: phonemes
+      punct: true
+      spaces: true
+      stresses: false
+      add_blank_at: last
+  dataloader_params:
+    drop_last: false
+    shuffle: false
+    batch_size: 64
+    num_workers: 1
+model:
+  _target_: nemo.collections.asr.modules.ConvASREncoder
+  feat_in: 128
+  activation: relu
+  conv_mask: true
+  jasper:
+  - filters: 256
+    repeat: 1
+    kernel:
+    - 3
+    stride:
+    - 1
+    dilation:
+    - 1
+    dropout: 0.1
+    residual: true
+    separable: true
+  - filters: 256
+    repeat: 5
+    kernel:
+    - 5
+    stride:
+    - 1
+    dilation:
+    - 1
+    dropout: 0.1
+    residual: true
+    separable: true
+    se: true
+    se_reduction_ratio: 8
+  - filters: 256
+    repeat: 5
+    kernel:
+    - 7
+    stride:
+    - 1
+    dilation:
+    - 1
+    dropout: 0.1
+    residual: true
+    separable: true
+    se: true
+    se_reduction_ratio: 8
+  - filters: 256
+    repeat: 5
+    kernel:
+    - 9
+    stride:
+    - 1
+    dilation:
+    - 1
+    dropout: 0.1
+    residual: true
+    separable: true
+    se: true
+    se_reduction_ratio: 8
+  - filters: 256
+    repeat: 5
+    kernel:
+    - 11
+    stride:
+    - 1
+    dilation:
+    - 1
+    dropout: 0.1
+    residual: true
+    separable: true
+    se: true
+    se_reduction_ratio: 8
+  - filters: 256
+    repeat: 5
+    kernel:
+    - 13
+    stride:
+    - 1
+    dilation:
+    - 1
+    dropout: 0.1
+    residual: true
+    separable: true
+    se: true
+    se_reduction_ratio: 8
+  - filters: 512
+    repeat: 1
+    kernel:
+    - 1
+    stride:
+    - 1
+    dilation:
+    - 1
+    dropout: 0.1
+    residual: true
+optim:
+  name: adam
+  lr: 0.001
+  weight_decay: 1.0e-06
+  sched:
+    name: CosineAnnealing
+    min_lr: 3.0e-06
+    warmup_ratio: 0.02
+target: nemo.collections.tts.models.talknet.TalkNetDursModel

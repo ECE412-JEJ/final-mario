@@ -1,0 +1,107 @@
+[NeMo W 2022-12-01 21:40:07 optimizers:47] Apex was not found. Using the lamb optimizer will error out.
+[NeMo W 2022-12-01 21:40:09 experimental:27] Module <class 'nemo.collections.asr.data.audio_to_text_dali.AudioToCharDALIDataset'> is experimental, not ready for production and is not fully supported. Use at your own risk.
+[NeMo W 2022-12-01 21:40:09 nemo_logging:349] /afs/ee.cooper.edu/user/j/jiyoon.pyo/.local/lib/python3.8/site-packages/hydra/experimental/initialize.py:43: UserWarning: hydra.experimental.initialize() is no longer experimental. Use hydra.initialize()
+      deprecation_warning(message=message)
+    
+[NeMo W 2022-12-01 21:40:09 nemo_logging:349] /afs/ee.cooper.edu/user/j/jiyoon.pyo/.local/lib/python3.8/site-packages/hydra/experimental/initialize.py:45: UserWarning: 
+    The version_base parameter is not specified.
+    Please specify a compatability version level, or None.
+    Will assume defaults for version 1.1
+      self.delegate = real_initialize(
+    
+[NeMo W 2022-12-01 21:40:09 nemo_logging:349] /afs/ee.cooper.edu/user/j/jiyoon.pyo/.local/lib/python3.8/site-packages/hydra/experimental/compose.py:25: UserWarning: hydra.experimental.compose() is no longer experimental. Use hydra.compose()
+      deprecation_warning(message=message)
+    
+[NeMo W 2022-12-01 21:40:09 nemo_logging:349] /afs/ee.cooper.edu/user/j/jiyoon.pyo/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/accelerator_connector.py:297: LightningDeprecationWarning: Passing `Trainer(accelerator='dp')` has been deprecated in v1.5 and will be removed in v1.7. Use `Trainer(strategy='dp')` instead.
+      rank_zero_deprecation(
+    
+[NeMo W 2022-12-01 21:40:11 nemo_logging:349] /afs/ee.cooper.edu/user/j/jiyoon.pyo/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/callback_connector.py:151: LightningDeprecationWarning: Setting `Trainer(checkpoint_callback=False)` is deprecated in v1.5 and will be removed in v1.7. Please consider using `Trainer(enable_checkpointing=False)`.
+      rank_zero_deprecation(
+    
+[NeMo W 2022-12-01 21:40:11 nemo_logging:349] /afs/ee.cooper.edu/user/j/jiyoon.pyo/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/logger_connector/logger_connector.py:58: LightningDeprecationWarning: Setting `Trainer(flush_logs_every_n_steps=1000)` is deprecated in v1.5 and will be removed in v1.7. Please configure flushing in the logger instead.
+      rank_zero_deprecation(
+    
+[NeMo W 2022-12-01 21:40:12 modelPT:138] If you intend to do training or fine-tuning, please call the ModelPT.setup_training_data() method and provide a valid configuration file to setup the train data loader.
+    Train config : 
+    dataset:
+      _target_: nemo.collections.asr.data.audio_to_text.AudioToCharWithDursF0Dataset
+      manifest_filepath: /afs/ee.cooper.edu/user/j/jiyoon.pyo/final-mario/content/trainfiles.json
+      max_duration: null
+      min_duration: 0.1
+      int_values: false
+      load_audio: false
+      normalize: false
+      sample_rate: 22050
+      trim: false
+      durs_file: /afs/ee.cooper.edu/user/j/jiyoon.pyo/final-mario/voice_sample/mario/durations.pt
+      f0_file: /afs/ee.cooper.edu/user/j/jiyoon.pyo/final-mario/voice_sample/mario/f0s.pt
+      blanking: true
+      vocab:
+        notation: phonemes
+        punct: true
+        spaces: true
+        stresses: false
+        add_blank_at: last
+    dataloader_params:
+      drop_last: false
+      shuffle: true
+      batch_size: 64
+      num_workers: 4
+    
+[NeMo W 2022-12-01 21:40:12 modelPT:145] If you intend to do validation, please call the ModelPT.setup_validation_data() or ModelPT.setup_multiple_validation_data() method and provide a valid configuration file to setup the validation data loader(s). 
+    Validation config : 
+    dataset:
+      _target_: nemo.collections.asr.data.audio_to_text.AudioToCharWithDursF0Dataset
+      manifest_filepath: /afs/ee.cooper.edu/user/j/jiyoon.pyo/final-mario/content/valfiles.json
+      max_duration: null
+      min_duration: 0.1
+      int_values: false
+      load_audio: false
+      normalize: false
+      sample_rate: 22050
+      trim: false
+      durs_file: /afs/ee.cooper.edu/user/j/jiyoon.pyo/final-mario/voice_sample/mario/durations.pt
+      f0_file: /afs/ee.cooper.edu/user/j/jiyoon.pyo/final-mario/voice_sample/mario/f0s.pt
+      blanking: true
+      vocab:
+        notation: phonemes
+        punct: true
+        spaces: true
+        stresses: false
+        add_blank_at: last
+    dataloader_params:
+      drop_last: false
+      shuffle: false
+      batch_size: 64
+      num_workers: 1
+    
+[NeMo I 2022-12-01 21:40:13 modelPT:439] Model TalkNetDursModel was successfully restored from /afs/ee.cooper.edu/user/j/jiyoon.pyo/final-mario/conf/talknet_durs.nemo.
+[NeMo W 2022-12-01 21:40:13 nemo_logging:349] /afs/ee.cooper.edu/user/j/jiyoon.pyo/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py:2126: LightningDeprecationWarning: `Trainer.num_gpus` was deprecated in v1.6 and will be removed in v1.8. Please use `Trainer.num_devices` instead.
+      rank_zero_deprecation(
+    
+[NeMo I 2022-12-01 21:40:13 collections:173] Dataset loaded with 262 files totalling 0.12 hours
+[NeMo I 2022-12-01 21:40:13 collections:174] 0 files were filtered totalling 0.00 hours
+[NeMo I 2022-12-01 21:40:13 collections:173] Dataset loaded with 66 files totalling 0.03 hours
+[NeMo I 2022-12-01 21:40:13 collections:174] 0 files were filtered totalling 0.00 hours
+[NeMo I 2022-12-01 21:40:13 modelPT:751] Optimizer config = Adam (
+    Parameter Group 0
+        amsgrad: False
+        betas: (0.9, 0.999)
+        capturable: False
+        differentiable: False
+        eps: 1e-08
+        foreach: None
+        fused: False
+        lr: 0.001
+        maximize: False
+        weight_decay: 1e-06
+    )
+[NeMo I 2022-12-01 21:40:13 lr_scheduler:621] Scheduler "<nemo.core.optim.lr_scheduler.CosineAnnealing object at 0x7f6204c494f0>" 
+    will be used during training (effective maximum steps = -1) - 
+    Parameters : 
+    (min_lr: 3.0e-06
+    warmup_ratio: 0.02
+    max_steps: -1
+    )
+[NeMo I 2022-12-01 21:40:13 exp_manager:216] Experiments will be logged at /afs/ee.cooper.edu/user/j/jiyoon.pyo/final-mario/voice_sample/mario/TalkNetDurs/2022-12-01_21-40-13
+[NeMo I 2022-12-01 21:40:13 exp_manager:563] TensorboardLogger has been set up
